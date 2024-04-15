@@ -1,10 +1,18 @@
 package com.card;
 
 import java.util.Scanner;
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class Card {
-	public int initBalance;
+	private int initBalance = 0;
+	private String cardName;
+	private int cvv;
+	private long cardNumber;
+	private String cardType;
+	private String nameOnCard;
+	private Date validFrom;
+	private Date validUpto;
 	
 	
 	public int getInitBalance() {

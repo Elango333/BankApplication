@@ -24,6 +24,7 @@ public class CardFunctionality {
 		  switch(option) {
 		  case 1:
 			  Debitcard debitcard = new Debitcard(100000);
+			  debitcard.
 			  debitcard.createDebitcard(sessionID);
 			  homepage.askMenu(sessionID);
 		  case 2:

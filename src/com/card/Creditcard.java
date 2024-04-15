@@ -11,8 +11,8 @@ public class Creditcard extends Card implements CreditcardInterface{
 	}		
 	
 	public int generateCreditcardCVV(int sessionID) {
-		int CVV_Number =(int) (sessionID%1000);
-		return CVV_Number;
+		cvv = (int) (sessionID%1000);
+		return cvv;
 	}
 	
 
