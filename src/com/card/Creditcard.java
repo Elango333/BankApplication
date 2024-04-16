@@ -15,30 +15,33 @@ public class Creditcard extends Card implements CreditcardInterface{
 		return cvv;
 	}
 	
-
 	@Override
-	public void createCreditcard(int sessionID) {
+	public long createCreditcard(int sessionID) {
+		long debitcardNumber = 0;
 		String displayName = getNameforCreatingCard();
-		int password = getATMPin();
-		LocalDate expiryDate = getExpiryDate();
+//		int password = getATMPin();
+		LocalDate validFromDate = getValidFromDate();
+		LocalDate validToDate = getValidToDate();
 		int cvv = generateCreditcardCVV(sessionID);
 		int initBalance = getInitBalance();
 		CreditcardServiceCharge serviceCharge = new CreditcardServiceCharge();
-		int serviceChargePerc = serviceCharge.getCreditcardServiceCharge(initBalance);
+		double serviceChargePerc = serviceCharge.getCreditcardServiceCharge(initBalance);
 		CreditcardDTO creditcardDTO = new CreditcardDTO();
 		creditcardDTO.setCustomerID(sessionID);
 		creditcardDTO.setName(displayName);
-		creditcardDTO.setPassword(password);
-		creditcardDTO.setExpirydate(expiryDate);
+//		creditcardDTO.setPassword(password);
+		creditcardDTO.setValidFrom(validFromDate);
+		creditcardDTO.setValidTo(validToDate);
 		creditcardDTO.setCvv(cvv);
 		creditcardDTO.setInitBalance(initBalance);
 		creditcardDTO.setServiceChargePerc(serviceChargePerc);
 		CardDAO cardDAO = new CardDAO();
-		boolean isCardCreated = cardDAO.storeCreditcardDetails(creditcardDTO);
-		if(isCardCreated) {
+		debitcardNumber = cardDAO.storeCreditcardDetails(creditcardDTO);
+		if(debitcardNumber > 0) {
 			System.out.println("\n╔══════════════════════════════════╗\n" +
 								 "║ Creditcard successfully created! ║\n" +
-								 "╚══════════════════════════════════╝\n");
+								 "╚══════════════════════════════════╝\n\n");
+			System.out.println("Your Creditcard number : "+ debitcardNumber);
 
 		}
 		else {
@@ -46,6 +49,7 @@ public class Creditcard extends Card implements CreditcardInterface{
 								 "║   Unable to create Creditcard!  ║\n" +
 								 "╚═════════════════════════════════╝\n");
 		}
+		return debitcardNumber;
 	}
 	 
 }

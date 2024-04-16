@@ -29,18 +29,12 @@ public class Card {
 		return name;
 		}
 	
-	
-	public int getATMPin() {
-		System.out.println("\n╔═════════════════════════════════╗\n" +
-							 "║  Pin number must have 4 digits! ║\n" +
-							 "╚═════════════════════════════════╝\n");
-		System.out.println("Create ATM card Pin number");
-		Scanner getPinNumSnr = new Scanner(System.in);
-		int pinNum = getPinNumSnr.nextInt();
-		return pinNum;
+	public LocalDate getValidFromDate() {
+		LocalDate today = LocalDate.now();
+		return today;
 	}
 	
-	public static LocalDate getExpiryDate() {
+	public LocalDate getValidToDate() {
 		LocalDate today = LocalDate.now();
 		LocalDate fiveYearsLater = today.plusYears(5);
 		return fiveYearsLater;

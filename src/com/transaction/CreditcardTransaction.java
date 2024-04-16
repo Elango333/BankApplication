@@ -9,6 +9,11 @@ public class CreditcardTransaction extends Transaction implements CreditcardTran
 	@Override
 	public void showCreditcardFeature(int sessionID, long creditcardNumber) {
 		TransactionDAO transactionDAO = new TransactionDAO();
+		  Scanner showCreditcardFeatureSnr = new Scanner(System.in);
+		  System.out.println("Enter the pin number to proceed");
+		  int pinNum = showCreditcardFeatureSnr.nextInt();
+		  int correctPinNum = transactionDAO.isPinCorrectForCreditcard(creditcardNumber);
+		  if(pinNum == correctPinNum) {
 		  System.out.println("\n" +
 			      "╔════════════════════════════════════╗\n" +
 			      "║                                    ║\n" +
@@ -24,11 +29,11 @@ public class CreditcardTransaction extends Transaction implements CreditcardTran
 			      "║                                    ║\n" +
 			      "╚════════════════════════════════════╝\n\n");
 		  
-		  Scanner showCreditcardFeatureSnr = new Scanner(System.in);
+		
 		  int option = showCreditcardFeatureSnr.nextInt();
 		  switch(option) {
 		  case 1:
-			  int debitAmount = getAmount();
+			  int debitAmount = debitAmount();
 			  boolean isPaymentDebited = transactionDAO.creditcardDebitAmount(debitAmount, sessionID, creditcardNumber);
 			  if(isPaymentDebited) {
 				System.out.println("\n╔═════════════════════════════════╗\n" +
@@ -39,7 +44,9 @@ public class CreditcardTransaction extends Transaction implements CreditcardTran
 				System.out.println("\n╔═════════════════════════════════╗\n" +
 						  		     "║   Unable to debit the payment!  ║\n" +
 						           	 "╚═════════════════════════════════╝\n");
+			  
 			  }
+	
 			  showCreditcardFeature(sessionID, creditcardNumber);
 			  break;
 		  case 2:
@@ -47,7 +54,7 @@ public class CreditcardTransaction extends Transaction implements CreditcardTran
 			  showCreditcardFeature(sessionID, creditcardNumber);
 			  break;
 		  case 3:
-			  int creditAmount = payAmount();
+			  int creditAmount = creditAmount();
 			  boolean isPaymentCredited = transactionDAO.creditcardCreditRepayableAmount(creditAmount, sessionID, creditcardNumber);
 			  if(isPaymentCredited) {
 					System.out.println("\n╔═════════════════════════════════╗\n" +
@@ -71,6 +78,13 @@ public class CreditcardTransaction extends Transaction implements CreditcardTran
 			  break;
 		  default:
 			  
+		  }
+		  }
+		  else {
+				System.out.println("\n╔═════════════════════════════════╗\n" +
+									 "║      Enter the correct pin      ║\n" +
+									 "╚═════════════════════════════════╝\n");	
+				  showCreditcardFeature(sessionID, creditcardNumber);
 		  }
 	}
 

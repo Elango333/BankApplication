@@ -8,6 +8,11 @@ public class DebitcardTransaction extends Transaction implements DebitcardTransa
 	@Override
 	public void showDebitcardFeature(int sessionID, long debitcardNumber) {
 		TransactionDAO transactionDAO = new TransactionDAO();
+		  Scanner showDebitcardFeatureSnr = new Scanner(System.in);
+		  System.out.println("Enter the pin number to proceed");
+		  int pinNum = showDebitcardFeatureSnr.nextInt();
+		  int correctPinNum = transactionDAO.isPinCorrectForDebitcard(debitcardNumber);
+		  if(pinNum == correctPinNum) {
 		  System.out.println("\n" +
 			      "╔═══════════════════════════════════╗\n" +
 			      "║                                   ║\n" +
@@ -21,11 +26,10 @@ public class DebitcardTransaction extends Transaction implements DebitcardTransa
 			      "║                                   ║\n" +
 			      "╚═══════════════════════════════════╝\n\n");
 		  
-		  Scanner showDebitcardFeatureSnr = new Scanner(System.in);
 		  int option = showDebitcardFeatureSnr.nextInt();
 		  switch(option) {
 		  case 1:
-			  int debitAmount = getAmount();
+			  int debitAmount = debitAmount();
 			  boolean isPaymentDebited = transactionDAO.debitcardDebitAmount(debitAmount, sessionID, debitcardNumber);
 			  if(isPaymentDebited) {
 				System.out.println("\n╔═════════════════════════════════╗\n" +
@@ -40,7 +44,7 @@ public class DebitcardTransaction extends Transaction implements DebitcardTransa
 			  showDebitcardFeature(sessionID, debitcardNumber);
 			  break;
 		  case 2:
-			  int creditAmount = payAmount();
+			  int creditAmount = creditAmount();
 			  boolean isPaymentCredited = transactionDAO.debitcardCreditAmount(creditAmount, sessionID, debitcardNumber);
 			  if(isPaymentCredited) {
 					System.out.println("\n╔═════════════════════════════════╗\n" +
@@ -63,6 +67,13 @@ public class DebitcardTransaction extends Transaction implements DebitcardTransa
 			  homepage.askMenu(sessionID);
 		  default:
 			  
+		  }
+		  }
+		  else {
+				System.out.println("\n╔═════════════════════════════════╗\n" +
+									 "║      Enter the correct pin      ║\n" +
+									 "╚═════════════════════════════════╝\n");	
+				  showDebitcardFeature(sessionID, debitcardNumber);
 		  }
 	}
 

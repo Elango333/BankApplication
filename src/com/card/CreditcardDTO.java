@@ -1,15 +1,20 @@
 package com.card;
 
+import java.sql.Date;
 import java.time.LocalDate;
 
 public class CreditcardDTO {
 	private int customerID;
 	private String name;
 	private int password;
-	private LocalDate expirydate;
+	private LocalDate validFrom;
+	private LocalDate validTo;
 	private int cvv;
 	private int initBalance;
-	private int serviceChargePerc;
+	private double serviceChargePerc;
+	private long creditcardNumber;
+	private Date validFromDB;
+	private Date validToDB;
 	
 	public int getCustomerID() {
 		return customerID;
@@ -29,12 +34,6 @@ public class CreditcardDTO {
 	public void setPassword(int password) {
 		this.password = password;
 	}
-	public LocalDate getExpirydate() {
-		return expirydate;
-	}
-	public void setExpirydate(LocalDate expirydate) {
-		this.expirydate = expirydate;
-	}
 	public int getCvv() {
 		return cvv;
 	}
@@ -47,10 +46,40 @@ public class CreditcardDTO {
 	public void setInitBalance(int initBalance) {
 		this.initBalance = initBalance;
 	}
-	public int getServiceChargePerc() {
+	public double getServiceChargePerc() {
 		return serviceChargePerc;
 	}
-	public void setServiceChargePerc(int serviceChargePerc) {
+	public void setServiceChargePerc(double serviceChargePerc) {
 		this.serviceChargePerc = serviceChargePerc;
+	}
+	public LocalDate getValidFrom() {
+		return validFrom;
+	}
+	public void setValidFrom(LocalDate validFrom) {
+		this.validFrom = validFrom;
+	}
+	public LocalDate getValidTo() {
+		return validTo;
+	}
+	public void setValidTo(LocalDate validTo) {
+		this.validTo = validTo;
+	}
+	public long getCreditcardNumber() {
+		return creditcardNumber;
+	}
+	public void setCreditcardNumber(long creditcardNumber) {
+		this.creditcardNumber = creditcardNumber;
+	}
+	public Date getValidFromDB() {
+		return validFromDB;
+	}
+	public void setValidFromDB(Date validFromDB) {
+		this.validFromDB = validFromDB;
+	}
+	public Date getValidToDB() {
+		return validToDB;
+	}
+	public void setValidToDB(Date validToDB) {
+		this.validToDB = validToDB;
 	}
 }

@@ -105,7 +105,7 @@ public class TransactionDAO {
 		  if((checkMinimumBalance-amount) >= 0) {
 			  try {
 			      PreparedStatement statement = conn.prepareStatement(ConstantFile.update_query_for_CreditcardPayment);
-			      statement.setInt(1, (getCreditcardBalanceAmount(sessionID, creditcardNumber)-amount));
+			      statement.setInt(1, (getCreditcardBalanceAmount(sessionID, creditcardNumber)-Math.round((amount + (amount/getServiceChargePercn(creditcardNumber))) / 100.0f) * 100));
 			      statement.setInt(2, sessionID);
 			      int rowsAffected = statement.executeUpdate();
 
@@ -114,7 +114,7 @@ public class TransactionDAO {
 			    	  isDebited = true;
 			    	  PreparedStatement stmnt = conn.prepareStatement(ConstantFile.update_query_for_CreditcardRepayableAmount);
 			    	  int repayableAmount = getCreditcardRepayableAmount(sessionID);
-			    	  int loanAmount = repayableAmount + (amount + (amount/getServiceChargePercn(creditcardNumber)));
+			    	  int loanAmount = repayableAmount + Math.round((amount + (amount/getServiceChargePercn(creditcardNumber))) / 100.0f) * 100;
 			    	  stmnt.setInt(1, loanAmount);
 			    	  stmnt.setInt(2, sessionID);
 			    	  stmnt.executeUpdate();
@@ -165,6 +165,10 @@ public class TransactionDAO {
 	  
 	  public boolean creditcardCreditRepayableAmount(int amount, int sessionID, long creditcardNumber) {
 		  boolean isCredited = false;
+		  if(amount > getCreditcardRepayableAmount(creditcardNumber)) {
+			  isCredited = false;  
+		  }
+		  else {
 		  try {
 		      PreparedStatement statement = conn.prepareStatement(ConstantFile.update_query_for_CreditcardRepayableAmount);
 		      statement.setInt(1, (getCreditcardRepayableAmount(creditcardNumber)-amount));
@@ -178,8 +182,41 @@ public class TransactionDAO {
 		      System.out.println("SQL Exception occurred in creditcardCreditRepayableAmount method");
 		      e.printStackTrace();
 		    } 
+		  }
 	  return isCredited;
 	  }
 	  
+	  public int isPinCorrectForDebitcard(long debitcardNumber) {
+		  int pinNum = 0;
+		  try {
+			  PreparedStatement statement = conn.prepareStatement(ConstantFile.select_query_for_debitcardPin);
+				statement.setLong(1, debitcardNumber);
+				ResultSet resultset = statement.executeQuery();
+				if(resultset.next()) {
+					pinNum = resultset.getInt(1);
+				}
+			  }
+			  catch (SQLException e) {
+			      System.out.println("SQL Exception occurred in isPinCorrectForDebitcard method");
+			      e.printStackTrace();
+			    }
+			  return pinNum;
+	  }
 	  
+	  public int isPinCorrectForCreditcard(long creditcardNumber) {
+		  int pinNum = 0;
+		  try {
+			  PreparedStatement statement = conn.prepareStatement(ConstantFile.select_query_for_creditcardPin);
+				statement.setLong(1, creditcardNumber);
+				ResultSet resultset = statement.executeQuery();
+						if(resultset.next()) {
+							pinNum = resultset.getInt(1);
+				}
+			  }
+			  catch (SQLException e) {
+			      System.out.println("SQL Exception occurred in isPinCorrectForCreditcard method");
+			      e.printStackTrace();
+			    }
+			  return pinNum;
+	  }
 }

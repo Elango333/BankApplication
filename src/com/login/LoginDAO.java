@@ -70,4 +70,27 @@ public class LoginDAO {
 	    }
 	    return SessionId;
 	  }
+	 
+	 public boolean IsCardExists(int sessionID) {
+		 boolean isCardExists = false;
+		 try {
+			 PreparedStatement statement = conn.prepareStatement(ConstantFile.select_query_for_debitcardNumber);
+			 statement.setInt(1, sessionID);
+			 ResultSet resultset = statement.executeQuery();
+			 if(resultset.next()) {
+				 isCardExists = true;
+			 }
+			 PreparedStatement stmnt = conn.prepareStatement(ConstantFile.select_query_for_creditcardNumber);
+			 stmnt.setInt(1, sessionID);
+			 ResultSet rs = stmnt.executeQuery();
+			 if(rs.next()) {
+				 isCardExists = true;
+			 }
+		 }
+		 catch (SQLException e) {
+		      System.out.println("Error executing SQL query in IsCardExists method");
+		      e.printStackTrace();
+		 }
+		 return isCardExists;
+	 } 
 }

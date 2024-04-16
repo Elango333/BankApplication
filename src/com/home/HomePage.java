@@ -79,8 +79,22 @@ public class HomePage {
 			  break;
 		  default:
 		  }
-
 	}
 	
-	
+	public void askMenuIfNewUser(int sessionID) {
+		Scanner askMenuSnr = new Scanner(System.in);
+		  System.out.println("\n" +
+			      "╔══════════════════════════════════════════════╗\n" +
+			      "║  Create new Debit/Credit card   - Press (1)  ║\n" +
+			      "╚══════════════════════════════════════════════╝\n\n");
+		  
+		  int option = askMenuSnr.nextInt();
+		  if(option==1) {
+			  CardFunctionality cardFunc = new CardFunctionality();
+			  cardFunc.showMenu(sessionID);
+		  }
+		  else {
+			  askMenuIfNewUser(sessionID);
+		  }
+	}
 }

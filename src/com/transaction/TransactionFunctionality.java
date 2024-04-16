@@ -26,13 +26,33 @@ public class TransactionFunctionality {
 		  switch(option) {
 		  case 1:
 			  long debitcardNumber = cardDAO.getDebitCardNumber(sessionID);
-			  DebitcardTransaction debitcard = new DebitcardTransaction();
-			  debitcard.showDebitcardFeature(sessionID, debitcardNumber);
+			  boolean isPasswordCreatedForDebitcard = cardDAO.isPinCreatedForDebitcard(debitcardNumber);
+			  if(isPasswordCreatedForDebitcard) {
+				  DebitcardTransaction debitcard = new DebitcardTransaction();
+				  debitcard.showDebitcardFeature(sessionID, debitcardNumber); 
+			  }
+			  else {
+				  	System.out.println("Create ATM card Pin number");  
+					System.out.println("\n╔═════════════════════════════════╗\n" +
+										 "║  Pin number must have 4 digits! ║\n" +
+										 "╚═════════════════════════════════╝\n");
+					
+			  }
+			 
 			  break;
 		  case 2:
 			  long creditcardNumber = cardDAO.getCreditCardNumber(sessionID);
-			  CreditcardTransaction creditcard = new CreditcardTransaction();
-			  creditcard.showCreditcardFeature(sessionID, creditcardNumber);
+			  boolean isPasswordCreatedForCreditcard = cardDAO.isPinCreatedForCreditcard(creditcardNumber);
+			  if(isPasswordCreatedForCreditcard) {
+				  CreditcardTransaction creditcard = new CreditcardTransaction();
+				  creditcard.showCreditcardFeature(sessionID, creditcardNumber);
+			  }
+			  else {
+					System.out.println("\n╔═════════════════════════════════╗\n" +
+										 "║  Pin number must have 4 digits! ║\n" +
+										 "╚═════════════════════════════════╝\n");
+					System.out.println("Create ATM card Pin number");  
+			  }
 			  break;
 		  case 3:
 			  HomePage homepage = new HomePage();
@@ -41,4 +61,5 @@ public class TransactionFunctionality {
 		  default:
 		  }
 	}
+
 }

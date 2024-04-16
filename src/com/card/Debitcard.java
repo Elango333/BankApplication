@@ -18,25 +18,29 @@ public class Debitcard extends Card implements DebitcardInterface{
 	
 	
 	@Override
-	public void createDebitcard(int sessionID) {
+	public long createDebitcard(int sessionID) {
+		long debitcardNumber = 0;
 		String displayName = getNameforCreatingCard();
-		int password = getATMPin();
-		LocalDate expiryDate = getExpiryDate();
+//		int password = getATMPin();
+		LocalDate validFromDate = getValidFromDate();
+		LocalDate validToDate = getValidToDate();
 		int cvv = generateDebitcardCVV(sessionID);
 		int initBalance = getInitBalance();
 		DebitcardDTO debitcardDTO = new DebitcardDTO();
 		debitcardDTO.setCustomerID(sessionID);
 		debitcardDTO.setName(displayName);
-		debitcardDTO.setPassword(password);
-		debitcardDTO.setExpirydate(expiryDate);
+//		debitcardDTO.setPassword(password);
+		debitcardDTO.setValidFrom(validFromDate);
+		debitcardDTO.setValidTo(validToDate);
 		debitcardDTO.setCvv(cvv);
 		debitcardDTO.setInitBalance(initBalance);
 		CardDAO cardDAO = new CardDAO();
-		boolean isCardCreated = cardDAO.storeDebitcardDetails(debitcardDTO);
-		if(isCardCreated) {
+		debitcardNumber = cardDAO.storeDebitcardDetails(debitcardDTO);
+		if(debitcardNumber > 0) {
 			System.out.println("\n╔═════════════════════════════════╗\n" +
 								 "║ Debitcard successfully created! ║\n" +
-								 "╚═════════════════════════════════╝\n");
+								 "╚═════════════════════════════════╝\n\n");
+			System.out.println("Your Debitcard number : " + debitcardNumber);
 
 		}
 		else {
@@ -44,11 +48,7 @@ public class Debitcard extends Card implements DebitcardInterface{
 								 "║   Unable to create Debitcard!  ║\n" +
 								 "╚════════════════════════════════╝\n");
 		}
+		return debitcardNumber;
 	}
-	
-	
-
-	
-	
 }
 

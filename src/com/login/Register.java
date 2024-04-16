@@ -6,8 +6,8 @@ import com.home.HomePage;
 
 
 public class Register {
+	
 	  public void register() {
-		  
 		   System.out.println("\n" +
 				      "╔════════════════════════════════════════╗\n" +
 				      "║                                        ║\n" +
@@ -23,7 +23,6 @@ public class Register {
 				      "║                                        ║\n" +
 				      "╚════════════════════════════════════════╝\n\n");
 		   
-		  
 	    Scanner registerSnr = new Scanner(System.in);
 	    System.out.println("Enter the name to register");
 	    String name = registerSnr.nextLine();

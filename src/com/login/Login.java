@@ -21,8 +21,15 @@ public class Login {
 	      System.out.println("\n╔═══════════════════════════╗\n" +
 	    		  			   "║  Logged in successfully!  ║\n" +
 	    		  			   "╚═══════════════════════════╝\n");
+	      boolean isCardExists = loginFunctions.IsCardExists(sessionID);
+	      if(isCardExists) {
+	    	  homepage.askMenu(sessionID);
+	      }
+	      else {
+	    	  homepage.askMenuIfNewUser(sessionID);
+	      }
 
-	      homepage.askMenu(sessionID);
+	    
 	      
 	    } else {
 	      System.out.println("\n╔══════════════════════════╗\n" +
