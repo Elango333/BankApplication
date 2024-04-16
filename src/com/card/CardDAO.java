@@ -15,20 +15,19 @@ public class CardDAO {
 	 private DatabaseConnection connection = DatabaseConnection.getInstance();
 	 private Connection conn = connection.getConnection();
 	 
-	 public long storeCreditcardDetails(CreditcardDTO ccDetails) {
+	 public long storeCreditcardDetails(Creditcard ccDetails,int sessionID,double serviceChargePern) {
 	     long creditcardNumber = 0;
 		 try {
 		      PreparedStatement statement = conn.prepareStatement(ConstantFile.insert_query_for_creditcardDetails, Statement.RETURN_GENERATED_KEYS);
 		      Date sqlDateForValidFrom = Date.valueOf(ccDetails.getValidFrom());
-		      Date sqlDateForValidTo = Date.valueOf(ccDetails.getValidTo());
-		      statement.setInt(1, ccDetails.getCustomerID());
+		      Date sqlDateForValidTo = Date.valueOf(ccDetails.getValidUpto());
+		      statement.setInt(1, sessionID);
 		      statement.setInt(2, ccDetails.getInitBalance());
 		      statement.setInt(3, ccDetails.getCvv());
-//		      statement.setInt(4, ccDetails.getPassword());
-		      statement.setString(4, ccDetails.getName());
+		      statement.setString(4, ccDetails.getNameOnCard());
 		      statement.setDate(5, sqlDateForValidFrom);
 		      statement.setDate(6, sqlDateForValidTo);
-		      statement.setFloat(7, (float) ccDetails.getServiceChargePerc());
+		      statement.setFloat(7, (float) serviceChargePern);
 		      statement.setInt(8, 0);
 		      int rowsAffected = statement.executeUpdate();
 		      if (rowsAffected > 0) {
@@ -44,17 +43,16 @@ public class CardDAO {
 		    return creditcardNumber;
 		  }
 	 
-	 public long storeDebitcardDetails(DebitcardDTO dcDetails) {
+	 public long storeDebitcardDetails(Debitcard dcDetails,int sessionID) {
 		long debitCardNumber = 0;
 		 try {
 		      PreparedStatement statement = conn.prepareStatement(ConstantFile.insert_query_for_debitcardDetails, Statement.RETURN_GENERATED_KEYS);
 		      Date sqlDateForValidFrom = Date.valueOf(dcDetails.getValidFrom());
-		      Date sqlDateForValidTo = Date.valueOf(dcDetails.getValidTo());
-		      statement.setInt(1, dcDetails.getCustomerID());
+		      Date sqlDateForValidTo = Date.valueOf(dcDetails.getValidUpto());
+		      statement.setInt(1, sessionID);
 		      statement.setInt(2, dcDetails.getInitBalance());
 		      statement.setInt(3, dcDetails.getCvv());
-//		      statement.setInt(4, dcDetails.getPassword());
-		      statement.setString(4, dcDetails.getName());
+		      statement.setString(4, dcDetails.getNameOnCard());
 		      statement.setDate(5, sqlDateForValidFrom);
 		      statement.setDate(6, sqlDateForValidTo);
 		      int rowsAffected = statement.executeUpdate();

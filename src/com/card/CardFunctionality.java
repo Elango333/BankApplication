@@ -1,8 +1,10 @@
 package com.card;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 import com.home.HomePage;
+import com.serviceCharge.CreditcardServiceCharge;
 
 public class CardFunctionality {
 
@@ -23,8 +25,7 @@ public class CardFunctionality {
 		  CardDAO cardDAO = new CardDAO();
 		  switch(option) {
 		  case 1:
-			  Debitcard debitcard = new Debitcard(100000);
-			  long debitcardNumber = debitcard.createDebitcard(sessionID);
+			  long debitcardNumber = createDebitcard(sessionID);
 			  int pinNumberForDebitcard = setATMPin();
 			  boolean isPinSetedForDebitcard = cardDAO.setPinForDebitcard(debitcardNumber, pinNumberForDebitcard);
 			  if(isPinSetedForDebitcard) {
@@ -39,8 +40,7 @@ public class CardFunctionality {
 			  }
 			  homepage.askMenu(sessionID);
 		  case 2:
-			  Creditcard creditcard = new Creditcard(100000);
-			  long creditcardNumber = creditcard.createCreditcard(sessionID);
+			  long creditcardNumber = createCreditcard(sessionID);
 			  int pinNumberForcreditcard = setATMPin();
 			  boolean isPinSetedForCreditcard = cardDAO.setPinForCreditcard(creditcardNumber, pinNumberForcreditcard);
 			  if(isPinSetedForCreditcard) {
@@ -118,4 +118,83 @@ public class CardFunctionality {
 		int pinNum = getPinNumSnr.nextInt();
 		return pinNum;
 	}
+	
+	public String getNameforCreatingCard() {
+		System.out.println("\n╔═════════════════════════════════╗\n" +
+							 "║  Name characters between 3 - 12 ║\n" +
+							 "╚═════════════════════════════════╝\n");
+		System.out.println("Enter the ATM card display name");
+		Scanner getNameSnr = new Scanner(System.in);
+		String name = getNameSnr.nextLine();
+		return name;
+		}
+	
+	public LocalDate getValidFromDate() {
+		LocalDate today = LocalDate.now();
+		return today;
+	}
+	
+	public LocalDate getValidToDate() {
+		LocalDate today = LocalDate.now();
+		LocalDate fiveYearsLater = today.plusYears(5);
+		return fiveYearsLater;
+	}
+	
+	public int generateCVV(int sessionID) {
+		int cvv = (int) (sessionID%1000);
+		return cvv;
+	}
+	
+	public long createCreditcard(int sessionID) {
+		Creditcard creditcard = new Creditcard();
+		long creditcardNumber = 0;
+		creditcard.setNameOnCard(getNameforCreatingCard());
+		creditcard.setValidFrom(getValidFromDate());
+		creditcard.setValidUpto(getValidToDate());
+		creditcard.setCvv(generateCVV(sessionID));
+		creditcard.setInitBalance(100000);
+		CreditcardServiceCharge serviceCharge = new CreditcardServiceCharge();
+		double serviceChargePerc = serviceCharge.getCreditcardServiceCharge(creditcard.getInitBalance());
+		CardDAO cardDAO = new CardDAO();
+		creditcardNumber = cardDAO.storeCreditcardDetails(creditcard, sessionID, serviceChargePerc);
+		if(creditcardNumber > 0) {
+			System.out.println("\n╔══════════════════════════════════╗\n" +
+								 "║ Creditcard successfully created! ║\n" +
+								 "╚══════════════════════════════════╝\n\n");
+			System.out.println("Your Creditcard number : "+ creditcardNumber);
+
+		}
+		else {
+			System.out.println("\n╔═════════════════════════════════╗\n" +
+								 "║   Unable to create Creditcard!  ║\n" +
+								 "╚═════════════════════════════════╝\n");
+		}
+		return creditcardNumber;
+	}
+	
+	public long createDebitcard(int sessionID) {
+		Debitcard debitcard = new Debitcard();
+		long debitcardNumber = 0;
+		debitcard.setNameOnCard(getNameforCreatingCard());
+		debitcard.setValidFrom(getValidFromDate());
+		debitcard.setValidUpto(getValidToDate());
+		debitcard.setCvv(generateCVV(sessionID));
+		debitcard.setInitBalance(100000);
+		CardDAO cardDAO = new CardDAO();
+		debitcardNumber = cardDAO.storeDebitcardDetails(debitcard, sessionID);
+		if(debitcardNumber > 0) {
+			System.out.println("\n╔═════════════════════════════════╗\n" +
+								 "║ Debitcard successfully created! ║\n" +
+								 "╚═════════════════════════════════╝\n\n");
+			System.out.println("Your Debitcard number : " + debitcardNumber);
+
+		}
+		else {
+			System.out.println("\n╔════════════════════════════════╗\n" +
+								 "║   Unable to create Debitcard!  ║\n" +
+								 "╚════════════════════════════════╝\n");
+		}
+		return debitcardNumber;
+	}
+
 }

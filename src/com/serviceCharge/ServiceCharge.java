@@ -2,8 +2,14 @@ package com.serviceCharge;
 
 public class ServiceCharge {
 	
-	public int getServiceCharge() {
-	  return 5;
+	private double serviceCharge = 0;
+	
+	public double getServiceCharge() {
+	  return serviceCharge;
+	}
+	
+	public void setServiceCharge(double serviceCharge) {
+		this.serviceCharge = serviceCharge;
 	}
   
 }
